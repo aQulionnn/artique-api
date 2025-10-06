@@ -11,12 +11,22 @@ builder.Services.AddAuthentication(BearerTokenDefaults.AuthenticationScheme)
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Database"));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.MapOpenApi();
 app.MapScalarApiReference(options =>
 {
@@ -24,6 +34,8 @@ app.MapScalarApiReference(options =>
     options.WithTheme(ScalarTheme.DeepSpace);
     options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
 });
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 

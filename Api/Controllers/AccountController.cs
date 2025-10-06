@@ -25,17 +25,20 @@ public class AccountController(AppDbContext context)
             Password = request.Password
         };
         
-        await _context.Users.AddAsync(user);
+        await _context.Accounts.AddAsync(user);
         await _context.SaveChangesAsync();
         
-        return Ok();
+        return Ok(new
+        {
+            message = "Account created successfully"
+        });
     }
     
     [HttpPost]
     [Route("sign-in")]
     public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(user => user.Username == request.Username);
+        var user = await _context.Accounts.FirstOrDefaultAsync(user => user.Username == request.Username);
         if (user is null) 
             return NotFound();
         
@@ -53,6 +56,13 @@ public class AccountController(AppDbContext context)
             ),
             authenticationScheme: BearerTokenDefaults.AuthenticationScheme
         );
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var accounts = await _context.Accounts.ToListAsync();
+        return Ok(accounts);
     }
 }
 
