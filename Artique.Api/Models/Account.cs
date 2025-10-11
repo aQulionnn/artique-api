@@ -1,4 +1,4 @@
-namespace Api.Models;
+namespace Artique.Api.Models;
 
 public class Account
 {

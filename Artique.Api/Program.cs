@@ -1,4 +1,4 @@
-using Api.Data;
+using Artique.Api.Data;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;

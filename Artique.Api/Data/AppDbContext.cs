@@ -1,7 +1,7 @@
-using Api.Models;
+using Artique.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Data;
+namespace Artique.Api.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) 
     : DbContext(options)

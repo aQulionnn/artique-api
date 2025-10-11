@@ -1,11 +1,11 @@
 using System.Security.Claims;
-using Api.Data;
-using Api.Models;
+using Artique.Api.Data;
+using Artique.Api.Models;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Controllers;
+namespace Artique.Api.Controllers;
 
 [Route("api/accounts")]
 [ApiController]
