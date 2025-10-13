@@ -1,4 +1,6 @@
 using Artique.Api.Data;
+using CloudinaryDotNet;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -23,6 +25,19 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
+});
+
+builder.Services.AddSingleton(_ =>
+{
+    Env.Load();
+    
+    var account = new Account(
+        Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME"),
+        Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY"),
+        Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET")
+    );
+
+    return new Cloudinary(account);
 });
 
 var app = builder.Build();
