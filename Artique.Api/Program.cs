@@ -3,6 +3,7 @@ using CloudinaryDotNet;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services
+    .AddHealthChecks()
+    .AddNpgSql(
+        connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+        name: "ArtiqueDb",
+        tags: ["db", "postgres", "supabase"],
+        failureStatus: HealthStatus.Unhealthy,
+        timeout: TimeSpan.FromSeconds(3)
+    );
 
 builder.Services.AddOpenApi();
 

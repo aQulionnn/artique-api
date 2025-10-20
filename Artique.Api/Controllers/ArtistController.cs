@@ -30,7 +30,14 @@ public class ArtistController(AppDbContext context)
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var artists = await _context.Artists.ToListAsync();
+        var artists = await _context.Artists
+            .Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name
+            })
+            .ToListAsync();
+        
         return Ok(artists);
     }
 }
