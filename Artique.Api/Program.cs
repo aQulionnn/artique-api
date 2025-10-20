@@ -8,18 +8,21 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddAuthentication(BearerTokenDefaults.AuthenticationScheme)
     .AddBearerToken();
 
-builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 builder.Services.AddControllers();
 
 builder.Services
     .AddHealthChecks()
     .AddNpgSql(
-        connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+        connectionString: builder.Configuration.GetConnectionString("Database")!,
         name: "ArtiqueDb",
         tags: ["db", "postgres", "supabase"],
         failureStatus: HealthStatus.Unhealthy,
@@ -41,8 +44,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSingleton(_ =>
 {
-    Env.Load();
-    
     var account = new Account(
         Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME"),
         Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY"),

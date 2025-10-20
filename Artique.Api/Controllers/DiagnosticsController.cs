@@ -6,11 +6,12 @@ namespace Artique.Api.Controllers;
 
 [Route("api/diagnostics")]
 [ApiController]
-public class DiagnosticsController(HealthCheckService healthChecks, IWebHostEnvironment env) 
+public class DiagnosticsController(HealthCheckService healthChecks, IWebHostEnvironment env, IConfiguration config) 
     : ControllerBase
 {
     private readonly HealthCheckService _healthChecks = healthChecks;
     private readonly IWebHostEnvironment _env = env;
+    private readonly IConfiguration _config = config; 
 
     [HttpGet]
     [Route("health")]
@@ -25,12 +26,12 @@ public class DiagnosticsController(HealthCheckService healthChecks, IWebHostEnvi
                 entry => entry.Key,
                 entry => new
                 {
-                    status = entry.Value.Status.ToString(),
-                    description = entry.Value.Description,
-                    exception = entry.Value.Exception,
-                    duration = entry.Value.Duration,
-                    tags = entry.Value.Tags,
-                    data = entry.Value.Data.Count > 0 ? entry.Value.Data : null
+                    Status = entry.Value.Status.ToString(),
+                    Description = entry.Value.Description,
+                    Exception = entry.Value.Exception,
+                    Duration = entry.Value.Duration,
+                    Tags = entry.Value.Tags,
+                    Data = entry.Value.Data.Count > 0 ? entry.Value.Data : null
                 })
         });  
     }
@@ -66,6 +67,22 @@ public class DiagnosticsController(HealthCheckService healthChecks, IWebHostEnvi
             {
                 Timestamp = DateTime.UtcNow.ToString("O")
             }
+        });
+    }
+
+    [HttpGet]
+    [Route("connection-info")]
+    public IActionResult GetConnectionInfo()
+    {
+        var connectionString = _config.GetConnectionString("Database");
+        var builder = new Npgsql.NpgsqlConnectionStringBuilder(connectionString);
+        
+        return Ok(new
+        {
+            Host = builder.Host,
+            Port = builder.Port,
+            Database = builder.Database,
+            SslMode = builder.SslMode.ToString(),
         });
     }
 }
