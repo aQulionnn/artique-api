@@ -10,6 +10,12 @@
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
         <PackageReference Include="CloudinaryDotNet" Version="1.27.8" />
         <PackageReference Include="DotNetEnv" Version="3.1.1" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
+        <PackageReference Include="HotChocolate.AspNetCore.CommandLine" Version="15.1.11" />
+        <PackageReference Include="HotChocolate.Types.Analyzers" Version="15.1.11">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">

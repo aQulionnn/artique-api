@@ -1,4 +1,5 @@
 using Artique.Api.Data;
+using Artique.Api.Queries;
 using CloudinaryDotNet;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.BearerToken;
@@ -18,6 +19,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 builder.Services.AddControllers();
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddTypeExtension<ArtworkQueries>();
 
 builder.Services
     .AddHealthChecks()
@@ -55,15 +61,19 @@ builder.Services.AddSingleton(_ =>
 
 var app = builder.Build();
 
+app.UseCors();
+
 app.MapOpenApi();
-app.MapScalarApiReference(options =>
+
+app.MapGraphQL("/graphql");
+app.MapScalarApiReference("/scalar", options =>
 {
     options.WithTitle("API");
     options.WithTheme(ScalarTheme.DeepSpace);
     options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
 });
 
-app.UseCors();
+app.RunWithGraphQLCommands(args);
 
 app.UseHttpsRedirection();
 
