@@ -63,6 +63,11 @@ var app = builder.Build();
 
 app.UseCors();
 
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapOpenApi();
 
 app.MapGraphQL("/graphql");
@@ -73,13 +78,8 @@ app.MapScalarApiReference("/scalar", options =>
     options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
 });
 
-app.RunWithGraphQLCommands(args);
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.MapControllers();
+
+app.RunWithGraphQLCommands(args);
 
 app.Run();
