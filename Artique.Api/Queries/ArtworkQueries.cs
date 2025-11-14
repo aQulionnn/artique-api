@@ -9,7 +9,10 @@ public class ArtworkQueries
 {
     public async Task<ICollection<Artwork>> GetArtworks([Service] AppDbContext context)
     {
-        var artworks = await context.Artworks.ToListAsync();    
+        var artworks = await context.Artworks
+            .Include(a => a.Artist)
+            .ToListAsync();    
+        
         return artworks;
     } 
     
@@ -17,7 +20,7 @@ public class ArtworkQueries
     {
         var artwork = await context.Artworks
             .Include(a => a.Artist)
-            .FirstOrDefaultAsync(artwork => artwork.Id == id);
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (artwork is null)
             throw new GraphQLException(ErrorBuilder.New()

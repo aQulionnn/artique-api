@@ -57,13 +57,6 @@ public class AccountController(AppDbContext context)
             authenticationScheme: BearerTokenDefaults.AuthenticationScheme
         );
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        var accounts = await _context.Accounts.ToListAsync();
-        return Ok(accounts);
-    }
 }
 
 public record SignUpRequest(string Email, string Username, string Password);

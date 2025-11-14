@@ -23,14 +23,16 @@ builder.Services.AddControllers();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
-    .AddTypeExtension<ArtworkQueries>();
+    .AddTypeExtension<ArtworkQueries>()
+    .AddTypeExtension<ArtistQueries>()
+    .AddTypeExtension<AccountQueries>();
 
 builder.Services
     .AddHealthChecks()
     .AddNpgSql(
         connectionString: builder.Configuration.GetConnectionString("Database")!,
         name: "ArtiqueDb",
-        tags: ["db", "postgres", "supabase"],
+        tags: ["db", "postgres", "neon"],
         failureStatus: HealthStatus.Unhealthy,
         timeout: TimeSpan.FromSeconds(3)
     );

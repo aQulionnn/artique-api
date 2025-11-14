@@ -26,20 +26,6 @@ public class ArtistController(AppDbContext context)
         
         return Ok("Artist created");
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        var artists = await _context.Artists
-            .Select(x => new
-            {
-                Id = x.Id,
-                Name = x.Name
-            })
-            .ToListAsync();
-        
-        return Ok(artists);
-    }
 }
 
 public record CreateArtistRequest(string Name);

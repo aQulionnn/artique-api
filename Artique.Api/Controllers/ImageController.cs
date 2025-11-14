@@ -36,20 +36,4 @@ public class ImageController(Cloudinary cloudinary)
 
         return StatusCode(500, $"Upload failed: {uploadResult.Error.Message}");
     }
-
-    [HttpGet]
-    [Route("secure-urls")]
-    public async Task<IActionResult> GetSecureUrls()
-    {
-        var listParams = new ListResourcesParams()
-        {
-            MaxResults = 5,
-            ResourceType = ResourceType.Image
-        };
-
-        var resources = await _cloudinary.ListResourcesAsync(listParams);
-        var secureUrls = resources.Resources.Select(resource => resource.SecureUrl.ToString()).ToList();
-
-        return Ok(secureUrls);
-    }
 }
