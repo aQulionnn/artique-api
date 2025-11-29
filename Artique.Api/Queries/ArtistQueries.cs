@@ -30,4 +30,15 @@ public class ArtistQueries
         
         return artist;
     }
+
+    public async Task<ICollection<Artist>> SearchArtists([Service] AppDbContext context, SearchArtistsInput input)
+    {
+        var artists = await context.Artists
+            .Where(a => a.Name.ToLower().Contains(input.Name.ToLower()))
+            .ToListAsync();
+        
+        return artists;
+    }
 }
+
+public sealed record SearchArtistsInput(string Name);
