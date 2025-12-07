@@ -31,6 +31,25 @@ public class ArtworkController(AppDbContext context)
         return Ok("Artwork added");
     }
 
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, UpdateArtworkRequest request)
+    {
+        var artwork = await _context.Artworks.FindAsync(id);
+        
+        if (artwork is null)
+            return NotFound("Artwork not found");
+        
+        artwork.Title = request.Title;
+        artwork.Description = request.Description;
+        artwork.ImageUrl = request.ImageUrl;
+        artwork.Year = request.Year;
+        
+        await _context.SaveChangesAsync();
+        
+        return Ok("Artwork updated");
+    }
+
     [HttpPatch]
     [Route("{id:guid}/description")]
     public async Task<IActionResult> UpdateDescription([FromRoute] Guid id, [FromBody] UpdateDescriptionRequest request)
@@ -63,4 +82,5 @@ public class ArtworkController(AppDbContext context)
 }
 
 public record AddArtworkRequest(string Title ,string Description, string ImageUrl, int Year, Guid ArtistId);
+public record UpdateArtworkRequest(string Title, string Description, string ImageUrl, int Year);
 public record UpdateDescriptionRequest(string Description);

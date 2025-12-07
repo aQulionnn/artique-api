@@ -26,6 +26,22 @@ public class ArtistController(AppDbContext context)
         
         return Ok("Artist created");
     }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, UpdateArtistRequest request)
+    {
+        var artist = await _context.Artists.FindAsync(id);
+        
+        if (artist is null)
+            return NotFound("Artist not found");
+        
+        artist.Name = request.Name;
+        await _context.SaveChangesAsync();
+        
+        return Ok("Artist updated");
+    }
 }
 
 public record CreateArtistRequest(string Name);
+public record UpdateArtistRequest(string Name);
