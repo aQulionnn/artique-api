@@ -31,6 +31,15 @@ public class ArtworkQueries
         return artwork;
     }
 
+    public async Task<ICollection<Artwork>> GetArtworksByArtistId([Service] AppDbContext context, Guid artistId)
+    {
+        var artworks = await context.Artworks
+            .Where(a => a.ArtistId == artistId)
+            .ToListAsync();
+        
+        return artworks;
+    }
+
     public async Task<ICollection<Artwork>> SearchArtworks([Service] AppDbContext context, SearchArtworksInput input)
     {
         var query = context.Artworks.AsQueryable();
