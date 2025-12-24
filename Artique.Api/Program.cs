@@ -3,11 +3,23 @@ using Artique.Api.Queries;
 using CloudinaryDotNet;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.AddServerHeader = false;
+    options.DisableStringReuse = true;
+    options.Limits.MinRequestBodyDataRate = new MinDataRate(100,  TimeSpan.FromSeconds(10));
+    options.Limits.MinResponseDataRate = new MinDataRate(100,  TimeSpan.FromSeconds(10));
+    options.Limits.MaxConcurrentConnections = 100;
+    options.Limits.MaxConcurrentUpgradedConnections = 100;
+    options.Limits.MaxRequestBodySize = 10 *  1024 * 1024;
+});
 
 Env.Load();
 builder.Configuration.AddEnvironmentVariables();
