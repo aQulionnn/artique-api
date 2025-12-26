@@ -7,10 +7,10 @@ namespace Artique.Api.Controllers;
 
 [Route("api/artworks")]
 [ApiController]
-public class ArtworkController(AppDbContext context) 
+public class ArtworkController(WriteDbContext context) 
     : ControllerBase
 {
-    private readonly AppDbContext _context = context;
+    private readonly WriteDbContext _context = context;
 
     [HttpPost]
     public async Task<IActionResult> Add(AddArtworkRequest request)

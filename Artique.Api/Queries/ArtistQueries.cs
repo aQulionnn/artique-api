@@ -9,7 +9,7 @@ namespace Artique.Api.Queries;
 [ExtendObjectType(typeof(Query))]
 public class ArtistQueries
 {
-    public async Task<ICollection<ArtistType>> GetArtists([Service] AppDbContext context)
+    public async Task<ICollection<ArtistType>> GetArtists([Service] ReadDbContext context)
     {
         return await context.Artists.Include(a => a.Artworks)
             .Select(a => new ArtistType
@@ -26,7 +26,7 @@ public class ArtistQueries
             }).ToListAsync();
     }
 
-    public async Task<ArtistType> GetArtistById([Service] AppDbContext context, Guid id)
+    public async Task<ArtistType> GetArtistById([Service] ReadDbContext context, Guid id)
     {
         var artist = await context.Artists.Include(a => a.Artworks).FirstOrDefaultAsync(a => a.Id == id);
         if (artist == null) throw new GraphQLException("Artist not found");
@@ -44,7 +44,7 @@ public class ArtistQueries
         };
     }
 
-    public async Task<ICollection<ArtistShortType>> SearchArtists([Service] AppDbContext context, SearchArtistsInput input)
+    public async Task<ICollection<ArtistShortType>> SearchArtists([Service] ReadDbContext context, SearchArtistsInput input)
     {
         return await context.Artists.Where(a => a.Name.ToLower().Contains(input.Name.ToLower()))
             .Select(a => new ArtistShortType { Id = a.Id, Name = a.Name })

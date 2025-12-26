@@ -9,10 +9,10 @@ namespace Artique.Api.Controllers;
 
 [Route("api/accounts")]
 [ApiController]
-public class AccountController(AppDbContext context) 
+public class AccountController(WriteDbContext context) 
     : ControllerBase
 {
-    private readonly AppDbContext _context = context;
+    private readonly WriteDbContext _context = context;
 
     [HttpPost]
     [Route("sign-up")]

@@ -10,7 +10,7 @@ namespace Artique.Api.Queries;
 [ExtendObjectType<Query>]
 public class AccountQueries
 {
-    public async Task<ICollection<AccountType>> GetAccounts([Service] AppDbContext context)
+    public async Task<ICollection<AccountType>> GetAccounts([Service] ReadDbContext context)
     {
         return await context.Accounts
             .Select(a => new AccountType
@@ -21,7 +21,7 @@ public class AccountQueries
             }).ToListAsync();
     }
 
-    public async Task<AccountType> GetAccountById([Service] AppDbContext context, Guid id)
+    public async Task<AccountType> GetAccountById([Service] ReadDbContext context, Guid id)
     {
         var account = await context.Accounts.FirstOrDefaultAsync(a => a.Id == id);
         if (account == null) throw new GraphQLException("Account not found");
@@ -33,7 +33,7 @@ public class AccountQueries
         };
     }
 
-    public async Task<ICollection<AccountType>> SearchAccounts([Service] AppDbContext context, SearchAccountsInput input)
+    public async Task<ICollection<AccountType>> SearchAccounts([Service] ReadDbContext context, SearchAccountsInput input)
     {
         return await context.Accounts
             .Where(a => a.Email.ToLower().Contains(input.Text.ToLower()) ||

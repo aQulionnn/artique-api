@@ -9,7 +9,7 @@ namespace Artique.Api.Queries;
 [ExtendObjectType(typeof(Query))]
 public class ArtworkQueries
 {
-    public async Task<ICollection<ArtworkType>> GetArtworks([Service] AppDbContext context)
+    public async Task<ICollection<ArtworkType>> GetArtworks([Service] ReadDbContext context)
     {
         return await context.Artworks.Include(a => a.Artist)
             .Select(a => new ArtworkType
@@ -23,7 +23,7 @@ public class ArtworkQueries
             }).ToListAsync();
     }
 
-    public async Task<ArtworkType> GetArtworkById([Service] AppDbContext context, Guid id)
+    public async Task<ArtworkType> GetArtworkById([Service] ReadDbContext context, Guid id)
     {
         var artwork = await context.Artworks.Include(a => a.Artist).FirstOrDefaultAsync(a => a.Id == id);
         if (artwork == null) throw new GraphQLException("Artwork not found");
@@ -38,7 +38,7 @@ public class ArtworkQueries
         };
     }
 
-    public async Task<ICollection<ArtworkShortType>> GetArtworksByArtistId([Service] AppDbContext context,
+    public async Task<ICollection<ArtworkShortType>> GetArtworksByArtistId([Service] ReadDbContext context,
         Guid artistId)
     {
         return await context.Artworks.Where(a => a.ArtistId == artistId)
@@ -51,7 +51,7 @@ public class ArtworkQueries
             }).ToListAsync();
     }
 
-    public async Task<ICollection<ArtworkShortType>> SearchArtworks([Service] AppDbContext context,
+    public async Task<ICollection<ArtworkShortType>> SearchArtworks([Service] ReadDbContext context,
         SearchArtworksInput input)
     {
         var query = context.Artworks.AsQueryable();

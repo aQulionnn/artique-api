@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Artique.Api.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) 
+public class WriteDbContext(DbContextOptions<WriteDbContext> options) 
     : DbContext(options)
 {
     public DbSet<Account> Accounts { get; set; }

@@ -27,8 +27,14 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddAuthentication(BearerTokenDefaults.AuthenticationScheme)
     .AddBearerToken();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<WriteDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
+builder.Services.AddDbContext<ReadDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
 
 builder.Services.AddControllers();
 

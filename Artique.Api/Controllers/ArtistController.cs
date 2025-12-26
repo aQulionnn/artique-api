@@ -7,10 +7,10 @@ namespace Artique.Api.Controllers;
 
 [Route("api/artists")]
 [ApiController]
-public class ArtistController(AppDbContext context) 
+public class ArtistController(WriteDbContext context) 
     : ControllerBase
 {
-    private readonly AppDbContext _context = context;
+    private readonly WriteDbContext _context = context;
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateArtistRequest request)
